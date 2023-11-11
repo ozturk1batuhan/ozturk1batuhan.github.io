@@ -3,106 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batuhan'ın Uygulama</title>
+    <title>Banka Arayüzü</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+        #balance {
+            font-size: 20px;
+            margin-bottom: 10px;
         }
-        th {
-            background-color: #f2f2f2;
+        #transferAmount {
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-<h2>Uygulama</h2>
+<h2>Banka Hesabınız</h2>
+<div id="balance">Bakiye: $1000</div>
 
-<table id="data-table">
-    <thead>
-        <tr>
-            <th>Ad</th>
-            <th>Soyad</th>
-            <th>Yaş</th>
-            <th>İşlem</th>
-        </tr>
-		 <tr>
-            <th>Batuhan</th>
-            <th>Öztürk</th>
-            <th>26</th>
-            <th>İşlem</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Veriler buraya eklenecek -->
-    </tbody>
-</table>
+<h3>Para Transferi</h3>
+<label for="toAccount">Alıcı Hesap Numarası:</label>
+<input type="text" id="toAccount" placeholder="Alıcı Hesap Numarası">
 
-<button id="addRowBtn">Satır Ekle</button>
-<button id="deleteRowBtn">Seçili Satırı Sil</button>
+<label for="transferAmount">Transfer Miktarı:</label>
+<input type="text" id="transferAmount" placeholder="Transfer Miktarı">
 
-<script src="https://cdn.jsdelivr.net/npm/terser@5/dist/bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator@2.13.0/dist/index.browser.js"></script>
+<button onclick="transferMoney()">Para Transferi Yap</button>
 
 <script>
-    const code = `
-        function addRow() {
-            var table = document.getElementById("data-table").getElementsByTagName('tbody')[0];
-            var newRow = table.insertRow(table.rows.length);
-            var cell1 = newRow.insertCell(0);
-            var cell2 = newRow.insertCell(1);
-            var cell3 = newRow.insertCell(2);
-            var cell4 = newRow.insertCell(3);
+    let balance = 1000;
 
-            cell1.innerHTML = "<input type='text' value=''>";
-            cell2.innerHTML = "<input type='text' value=''>";
-            cell3.innerHTML = "<input type='text' value=''>";
-            cell4.innerHTML = "<button onclick='deleteThisRow(this)'>Sil</button>";
+    function updateBalance() {
+        document.getElementById('balance').innerText = 'Bakiye: $' + balance;
+    }
+
+    function transferMoney() {
+        const toAccount = document.getElementById('toAccount').value;
+        const transferAmount = parseFloat(document.getElementById('transferAmount').value);
+
+        if (!toAccount || isNaN(transferAmount) || transferAmount <= 0 || transferAmount > balance) {
+            alert('Geçersiz transfer bilgileri. Lütfen kontrol edin.');
+            return;
         }
 
-        function deleteRow() {
-            var table = document.getElementById("data-table").getElementsByTagName('tbody')[0];
-            var rowCount = table.rows.length;
+        balance -= transferAmount;
+        updateBalance();
+        alert('Para transferi başarıyla gerçekleşti!');
+    }
 
-            if (rowCount > 0) {
-                table.deleteRow(rowCount - 1);
-            }
-        }
-
-        function deleteThisRow(row) {
-            var i = row.parentNode.parentNode.rowIndex;
-            document.getElementById("data-table").deleteRow(i);
-        }
-
-        document.getElementById("addRowBtn").addEventListener("click", addRow);
-        document.getElementById("deleteRowBtn").addEventListener("click", deleteRow);
-    `;
-
-    const obfuscatedCode = javascriptObfuscator.obfuscate(code, {
-        compact: true,
-        controlFlowFlattening: true,
-        controlFlowFlatteningThreshold: 1,
-        numbersToExpressions: true,
-        simplify: true,
-        shuffleStringArray: true,
-        splitStrings: true,
-        stringArray: true,
-        stringArrayEncoding: "rc4",
-        stringArrayThreshold: 1,
-        transformObjectKeys: true,
-        unicodeEscapeSequence: true,
-    });
-
-    const minifiedCode = Terser.minify(obfuscatedCode.getObfuscatedCode()).code;
-
-    const script = document.createElement("script");
-    script.innerHTML = minifiedCode;
-    document.body.appendChild(script);
+    updateBalance();
 </script>
 
 </body>
