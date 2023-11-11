@@ -1,99 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Integration</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100 Günlük Takvim</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    td {
+      cursor: pointer;
+    }
+
+    input {
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-    <h1>ChatGPT Integration</h1>
-    <div>
-        <label for="userInput">Your message:</label>
-        <input type="text" id="userInput" onkeyup="sendMessage(event)">
-        <button onclick="sendMessage()">Send</button>
-    </div>
-    <div id="chatContainer"></div>
 
-    <script>
-        const chatContainer = document.getElementById('chatContainer');
-        const userInput = document.getElementById('userInput');
+  <h1>100 Günlük Takvim</h1>
 
-        function sendMessage(event) {
-            if (event && event.key !== 'Enter') {
-                return;
-            }
+  <table id="takvim">
+    <thead>
+      <tr>
+        <th>Gün</th>
+        <th>Not</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Buraya 100 gün boyunca devam eden satırları ekleyebilirsin -->
+    </tbody>
+  </table>
 
-            const message = userInput.value.trim();
-            if (message === '') {
-                return;
-            }
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // 100 gün boyunca takvim satırlarını oluştur
+      var takvimTable = document.getElementById("takvim").getElementsByTagName('tbody')[0];
 
-            appendMessage('User', message);
-            userInput.value = '';
-const API_URL = 'https://api.openai.com/v1/chat/completions'; // OpenAI API URL'si
+      for (var gun = 1; gun <= 100; gun++) {
+        var row = takvimTable.insertRow(-1);
 
-// OpenAI API Anahtarı
-const API_KEY = 'YOUR_OPENAI_API_KEY';
+        var gunCell = row.insertCell(0);
+        gunCell.textContent = "Gün " + gun;
 
-function sendMessage(event) {
-    if (event && event.key !== 'Enter') {
-        return;
-    }
+        var notCell = row.insertCell(1);
+        var notInput = document.createElement("input");
+        notInput.type = "text";
+        notCell.appendChild(notInput);
 
-    const message = userInput.value.trim();
-    if (message === '') {
-        return;
-    }
+        // Her bir güne tıklandığında not alanına odaklan
+        row.addEventListener("click", function () {
+          notInput.focus();
+        });
+      }
+    });
+  </script>
 
-    appendMessage('User', message);
-    userInput.value = '';
-
-    // OpenAI API'ye isteği gönder
-    fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-            messages: [{ role: 'system', content: 'You are a chatbot' }, { role: 'user', content: message }]
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        const botReply = data.choices[0].message.content;
-        appendMessage('ChatGPT', botReply);
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-            // OpenAI API'ye mesajı göndermek için gereken adımları ekleyin
-            // Bu adımlar OpenAI API kullanımına özeldir.
-
-            // API'ye isteği gönder
-            // fetch('OpenAI_API_URL', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'Authorization': 'Bearer YOUR_API_KEY'
-            //     },
-            //     body: JSON.stringify({
-            //         messages: [{ role: 'system', content: 'You are a chatbot' }, { role: 'user', content: message }]
-            //     })
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     const botReply = data.choices[0].message.content;
-            //     appendMessage('ChatGPT', botReply);
-            // })
-            // .catch(error => console.error('Error:', error));
-        }
-
-        function appendMessage(role, content) {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `<strong>${role}:</strong> ${content}`;
-            chatContainer.appendChild(messageElement);
-        }
-    </script>
 </body>
 </html>
