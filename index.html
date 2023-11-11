@@ -30,6 +30,42 @@
 
             appendMessage('User', message);
             userInput.value = '';
+const API_URL = 'https://api.openai.com/v1/chat/completions'; // OpenAI API URL'si
+
+// OpenAI API Anahtarı
+const API_KEY = 'YOUR_OPENAI_API_KEY';
+
+function sendMessage(event) {
+    if (event && event.key !== 'Enter') {
+        return;
+    }
+
+    const message = userInput.value.trim();
+    if (message === '') {
+        return;
+    }
+
+    appendMessage('User', message);
+    userInput.value = '';
+
+    // OpenAI API'ye isteği gönder
+    fetch(API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify({
+            messages: [{ role: 'system', content: 'You are a chatbot' }, { role: 'user', content: message }]
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const botReply = data.choices[0].message.content;
+        appendMessage('ChatGPT', botReply);
+    })
+    .catch(error => console.error('Error:', error));
+}
 
             // OpenAI API'ye mesajı göndermek için gereken adımları ekleyin
             // Bu adımlar OpenAI API kullanımına özeldir.
