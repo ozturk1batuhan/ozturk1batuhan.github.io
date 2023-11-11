@@ -50,7 +50,6 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // 100 gün boyunca takvim satırlarını oluştur
       var takvimTable = document.getElementById("takvim").getElementsByTagName('tbody')[0];
 
       for (var gun = 1; gun <= 100; gun++) {
@@ -68,6 +67,22 @@
         row.addEventListener("click", function () {
           notInput.focus();
         });
+
+        // Her not alanının değişikliklerini dinle
+        notInput.addEventListener("input", function () {
+          // Günlük numarasını ve notu al
+          var gunNumarasi = gun;
+          var not = this.value;
+
+          // localStorage'a kaydet
+          localStorage.setItem("gun" + gunNumarasi, not);
+        });
+
+        // Sayfa yüklendiğinde localStorage'dan notları al
+        var kayitliNot = localStorage.getItem("gun" + gun);
+        if (kayitliNot) {
+          notInput.value = kayitliNot;
+        }
       }
     });
   </script>
