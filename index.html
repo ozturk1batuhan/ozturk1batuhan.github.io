@@ -3,57 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banka Arayüzü</title>
+    <title>Link Kısaltma Servisi</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        #balance {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        #transferAmount {
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
 
-<h2>Banka Hesabınız</h2>
-<div id="balance">Bakiye: $1000</div>
+<h2>Link Kısaltma Servisi</h2>
 
-<h3>Para Transferi</h3>
-<label for="toAccount">Alıcı Hesap Numarası:</label>
-<input type="text" id="toAccount" placeholder="Alıcı Hesap Numarası">
+<label for="url">Uzun URL:</label>
+<input type="text" id="url" required>
+<button onclick="shortenUrl()">Kısalt</button>
 
-<label for="transferAmount">Transfer Miktarı:</label>
-<input type="text" id="transferAmount" placeholder="Transfer Miktarı">
-
-<button onclick="transferMoney()">Para Transferi Yap</button>
+<p id="result" style="display: none;"></p>
 
 <script>
-    let balance = 1000;
+    function shortenUrl() {
+        const originalUrl = document.getElementById('url').value;
+        const shortUrl = generateShortUrl();
+        const resultElement = document.getElementById('result');
 
-    function updateBalance() {
-        document.getElementById('balance').innerText = 'Bakiye: $' + balance;
+        resultElement.style.display = 'block';
+        resultElement.innerHTML = `
+            Orijinal URL: <a href="${originalUrl}" target="_blank">${originalUrl}</a><br>
+            Kısa URL: <a href="${shortUrl}" target="_blank">${shortUrl}</a>
+        `;
     }
 
-    function transferMoney() {
-        const toAccount = document.getElementById('toAccount').value;
-        const transferAmount = parseFloat(document.getElementById('transferAmount').value);
-
-        if (!toAccount || isNaN(transferAmount) || transferAmount <= 0 || transferAmount > balance) {
-            alert('Geçersiz transfer bilgileri. Lütfen kontrol edin.');
-            return;
-        }
-
-        balance -= transferAmount;
-        updateBalance();
-        alert('Para transferi başarıyla gerçekleşti!');
+    function generateShortUrl() {
+        // Burada kendi kısa URL oluşturma mantığınızı ekleyebilirsiniz.
+        // Örneğin: Uzun URL'yi hash algoritması ile kısaltabilirsiniz.
+        return "https://example.com/" + Math.random().toString(36).substring(7);
     }
-
-    updateBalance();
 </script>
 
 </body>
