@@ -3,43 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Kısaltma Servisi</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-    </style>
+    <title>ChatGPT Integration</title>
 </head>
 <body>
+    <h1>ChatGPT Integration</h1>
+    <div>
+        <label for="userInput">Your message:</label>
+        <input type="text" id="userInput" onkeyup="sendMessage(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div id="chatContainer"></div>
 
-<h2>Link Kısaltma Servisi</h2>
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
 
-<label for="url">Uzun URL:</label>
-<input type="text" id="url" required>
-<button onclick="shortenUrl()">Kısalt</button>
+        function sendMessage(event) {
+            if (event && event.key !== 'Enter') {
+                return;
+            }
 
-<p id="result" style="display: none;"></p>
+            const message = userInput.value.trim();
+            if (message === '') {
+                return;
+            }
 
-<script>
-    function shortenUrl() {
-        const originalUrl = document.getElementById('url').value;
-        const shortUrl = generateShortUrl();
-        const resultElement = document.getElementById('result');
+            appendMessage('User', message);
+            userInput.value = '';
 
-        resultElement.style.display = 'block';
-        resultElement.innerHTML = `
-            Orijinal URL: <a href="${originalUrl}" target="_blank">${originalUrl}</a><br>
-            Kısa URL: <a href="${shortUrl}" target="_blank">${shortUrl}</a>
-        `;
-    }
+            // OpenAI API'ye mesajı göndermek için gereken adımları ekleyin
+            // Bu adımlar OpenAI API kullanımına özeldir.
 
-    function generateShortUrl() {
-        // Burada kendi kısa URL oluşturma mantığınızı ekleyebilirsiniz.
-        // Örneğin: Uzun URL'yi hash algoritması ile kısaltabilirsiniz.
-        return "https://ozturk1batuhan.github.io/" + Math.random().toString(36).substring(7);
-    }
-</script>
+            // API'ye isteği gönder
+            // fetch('OpenAI_API_URL', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Authorization': 'Bearer YOUR_API_KEY'
+            //     },
+            //     body: JSON.stringify({
+            //         messages: [{ role: 'system', content: 'You are a chatbot' }, { role: 'user', content: message }]
+            //     })
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     const botReply = data.choices[0].message.content;
+            //     appendMessage('ChatGPT', botReply);
+            // })
+            // .catch(error => console.error('Error:', error));
+        }
 
+        function appendMessage(role, content) {
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = `<strong>${role}:</strong> ${content}`;
+            chatContainer.appendChild(messageElement);
+        }
+    </script>
 </body>
 </html>
