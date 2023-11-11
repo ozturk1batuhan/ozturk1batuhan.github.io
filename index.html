@@ -48,7 +48,27 @@
     </tbody>
   </table>
 
+  <!-- Firebase SDK ekleyin -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js"></script>
+
   <script>
+    // Firebase projenizin yapılandırma bilgilerini buraya ekleyin
+    var firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Firebase başlat
+    firebase.initializeApp(firebaseConfig);
+
+    // Veritabanı referansı
+    var database = firebase.database();
+
     document.addEventListener("DOMContentLoaded", function () {
       var takvimTable = document.getElementById("takvim").getElementsByTagName('tbody')[0];
 
@@ -74,15 +94,18 @@
           var gunNumarasi = gun;
           var not = this.value;
 
-          // localStorage'a kaydet
-          localStorage.setItem("gun" + gunNumarasi, not);
+          // Firebase veritabanına kaydet
+          database.ref('gunler/' + gunNumarasi).set({
+            not: not
+          });
         });
 
-        // Sayfa yüklendiğinde localStorage'dan notları al
-        var kayitliNot = localStorage.getItem("gun" + gun);
-        if (kayitliNot) {
+        // Sayfa yüklendiğinde Firebase veritabanından notları al
+        var gunRef = database.ref('gunler/' + gun);
+        gunRef.on('value', function(snapshot) {
+          var kayitliNot = snapshot.val() ? snapshot.val().not : '';
           notInput.value = kayitliNot;
-        }
+        });
       }
     });
   </script>
