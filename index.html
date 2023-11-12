@@ -54,11 +54,11 @@
 
                 var formattedDate = yil + '-' + (ay < 10 ? '0' : '') + ay + '-' + (gun < 10 ? '0' : '') + gun;
 
-                // Örnek olarak her gün için aynı işi ekleyelim
-                var isler = 'Örnek İş';
+                // Kullanıcıdan alınan işleri buraya ekleyin
+                var isler = prompt('Lütfen ' + formattedDate + ' tarihinde yapılacak işleri girin:');
 
                 var tr = document.createElement('tr');
-                tr.innerHTML = '<td>' + formattedDate + '</td><td>' + isler + '</td>';
+                tr.innerHTML = '<td>' + formattedDate + '</td><td>' + (isler || '-') + '</td>';
 
                 takvimBody.appendChild(tr);
             }
