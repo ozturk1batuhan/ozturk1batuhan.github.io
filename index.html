@@ -3,75 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Sitesi Başlığı</title>
-	<style>#kayit-formu {
-    width: 300px;
-    margin: 20px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+    <title>12 Kasım Takvimi</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
 
-label {
-    display: block;
-    margin: 10px 0;
-}
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-input {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0 10px;
-    box-sizing: border-box;
-}
-
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-</style>
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-    <h1>Web Siteniz</h1>
+    <h1>12 Kasım Takvimi</h1>
 
-    <div id="kayit-formu">
-        <h2>Kayıt Formu</h2>
-        <form id="kayitFormu">
-            <label for="ad">Adınız:</label>
-            <input type="text" id="ad" name="ad" required>
+    <table>
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>İşler</th>
+            </tr>
+        </thead>
+        <tbody id="takvim-body">
+            <!-- Takvim içeriği burada olacak -->
+        </tbody>
+    </table>
 
-            <label for="soyad">Soyadınız:</label>
-            <input type="text" id="soyad" name="soyad" required>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var takvimBody = document.getElementById('takvim-body');
+            
+            // Başlangıç tarihi
+            var baslangicTarihi = new Date('2023-11-12');
 
-            <label for="email">E-posta Adresiniz:</label>
-            <input type="email" id="email" name="email" required>
+            // 7 gün boyunca takvim oluştur
+            for (var i = 0; i < 7; i++) {
+                var tarih = new Date(baslangicTarihi);
+                tarih.setDate(baslangicTarihi.getDate() + i);
 
-            <button type="submit">Kayıt Ol</button>
-        </form>
-    </div>
-	<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var kayitFormu = document.getElementById('kayitFormu');
+                var gun = tarih.getDate();
+                var ay = tarih.getMonth() + 1; // Ay sayısı 0-11 arasında olduğu için +1 ekliyoruz
+                var yil = tarih.getFullYear();
 
-    kayitFormu.addEventListener('submit', function(event) {
-        event.preventDefault(); // Formun sayfayı yenilemesini engelle
+                var formattedDate = yil + '-' + (ay < 10 ? '0' : '') + ay + '-' + (gun < 10 ? '0' : '') + gun;
 
-        // Form verilerini al
-        var ad = document.getElementById('ad').value;
-        var soyad = document.getElementById('soyad').value;
-        var email = document.getElementById('email').value;
+                // Örnek olarak her gün için aynı işi ekleyelim
+                var isler = 'Örnek İş';
 
-        // Burada form verilerini istediğiniz şekilde işleyebilirsiniz
-        console.log('Ad: ' + ad);
-        console.log('Soyad: ' + soyad);
-        console.log('E-posta: ' + email);
+                var tr = document.createElement('tr');
+                tr.innerHTML = '<td>' + formattedDate + '</td><td>' + isler + '</td>';
 
-        // Bu noktada sunucuya veri gönderme işlemleri eklenebilir
-    });
-});
-</script>
+                takvimBody.appendChild(tr);
+            }
+        });
+    </script>
 </body>
 </html>
