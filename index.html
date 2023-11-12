@@ -1,135 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>100 Günlük Takvim</title>
-  <style>
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Sitesi Başlığı</title>
+	<style>#kayit-formu {
+    width: 300px;
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 
-    table, th, td {
-      border: 1px solid #ddd;
-    }
+label {
+    display: block;
+    margin: 10px 0;
+}
 
-    th, td {
-      padding: 15px;
-      text-align: center;
-    }
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 10px;
+    box-sizing: border-box;
+}
 
-    th {
-      background-color: #f2f2f2;
-    }
-
-    td {
-      cursor: pointer;
-    }
-
-    input {
-      width: 100%;
-    }
-  </style>
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+</style>
 </head>
 <body>
+    <h1>Web Siteniz</h1>
 
-  <h1>100 Günlük Takvim</h1>
+    <div id="kayit-formu">
+        <h2>Kayıt Formu</h2>
+        <form id="kayitFormu">
+            <label for="ad">Adınız:</label>
+            <input type="text" id="ad" name="ad" required>
 
-  <table id="takvim">
-    <thead>
-      <tr>
-        <th>Gün</th>
-        <th>Not</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Buraya 100 gün boyunca devam eden satırları ekleyebilirsin -->
-    </tbody>
-  </table>
+            <label for="soyad">Soyadınız:</label>
+            <input type="text" id="soyad" name="soyad" required>
 
-  <!-- Firebase SDK ekleyin -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js"></script>
-//rules_version = '2';
+            <label for="email">E-posta Adresiniz:</label>
+            <input type="email" id="email" name="email" required>
 
-//service cloud.firestore {
-  //match /databases/{database}/documents {
-    //match /{document=**} {
-      //allow read, write: if false;
-    //}
- // }
-//}
-  <script>
-  <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+            <button type="submit">Kayıt Ol</button>
+        </form>
+    </div>
+	<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var kayitFormu = document.getElementById('kayitFormu');
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    // Firebase projenizin yapılandırma bilgilerini buraya ekleyin
-    var firebaseConfig = {
-      apiKey: "AIzaSyChA0Db_91UkpkOo5Yvv09cNSkbx9--tLA",
-      authDomain: "gunluktakvim-38fa4.firebaseapp.com",
-      projectId: "gunluktakvim-38fa4",
-	  storageBucket: "gunluktakvim-38fa4.appspot.com",
-      messagingSenderId: "857102163222",
-      appId: "1:857102163222:web:4bfbb3001c6ee71acec437",
-      measurementId: "G-W20J2E2Q49"
-    };
+    kayitFormu.addEventListener('submit', function(event) {
+        event.preventDefault(); // Formun sayfayı yenilemesini engelle
 
-    // Firebase başlat
-    firebase.initializeApp(firebaseConfig);
-	 const app = initializeApp(firebaseConfig);
-     const analytics = getAnalytics(app);
+        // Form verilerini al
+        var ad = document.getElementById('ad').value;
+        var soyad = document.getElementById('soyad').value;
+        var email = document.getElementById('email').value;
 
-    // Veritabanı referansı
-    var database = firebase.database();
+        // Burada form verilerini istediğiniz şekilde işleyebilirsiniz
+        console.log('Ad: ' + ad);
+        console.log('Soyad: ' + soyad);
+        console.log('E-posta: ' + email);
 
-    document.addEventListener("DOMContentLoaded", function () {
-      var takvimTable = document.getElementById("takvim").getElementsByTagName('tbody')[0];
-
-      for (var gun = 1; gun <= 100; gun++) {
-        var row = takvimTable.insertRow(-1);
-
-        var gunCell = row.insertCell(0);
-        gunCell.textContent = "Gün " + gun;
-
-        var notCell = row.insertCell(1);
-        var notInput = document.createElement("input");
-        notInput.type = "text";
-        notCell.appendChild(notInput);
-
-        // Her bir güne tıklandığında not alanına odaklan
-        row.addEventListener("click", function () {
-          notInput.focus();
-        });
-
-        // Her not alanının değişikliklerini dinle
-        notInput.addEventListener("input", function () {
-          // Günlük numarasını ve notu al
-          var gunNumarasi = gun;
-          var not = this.value;
-
-          // Firebase veritabanına kaydet
-          database.ref('gunler/' + gunNumarasi).set({
-            not: not
-          });
-        });
-
-        // Sayfa yüklendiğinde Firebase veritabanından notları al
-        var gunRef = database.ref('gunler/' + gun);
-        gunRef.on('value', function(snapshot) {
-          var kayitliNot = snapshot.val() ? snapshot.val().not : '';
-          notInput.value = kayitliNot;
-        });
-      }
+        // Bu noktada sunucuya veri gönderme işlemleri eklenebilir
     });
-  </script>
-
+});
+</script>
 </body>
 </html>
